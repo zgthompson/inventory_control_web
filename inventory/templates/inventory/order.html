@@ -1,0 +1,18 @@
+{% load dajaxice_templatetags %}
+<html>
+    <head>
+        <title>New Order</title>
+        <script src="/static/script/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}dajax/jquery.dajax.core.js"></script>
+        <script>
+            function my_js_callback(data) {
+                alert(data.message);
+            }
+        </script>
+        {% dajaxice_js_import %}
+    </head>
+    <body>
+        <div id="box"></div>
+        <button onclick="Dajaxice.inventory.assign_test(Dajax.process);">Click me!</button>
+    </body>
+</html>
