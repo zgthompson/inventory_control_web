@@ -145,3 +145,9 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ["GM_LOGIN"]
+EMAIL_HOST_PASSWORD = os.environ["GM_PASS"]
+EMAIL_PORT = 587

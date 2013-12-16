@@ -3,108 +3,41 @@
 <html>
     <head>
         <link href="/static/style/bootstrap.min.css" rel="stylesheet" media="screen">
-        <style>
-            #item-results input, #pending-order input { width: 60px; }
-            #item-results form { display: inline; }
-        </style>
-
+        <link href="/static/style/main.css" rel="stylesheet" media="screen">
+        
         <title>New Order</title>
+
         <script src="/static/script/js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="{{STATIC_URL}}dajax/jquery.dajax.core.js"></script>
         <script src="/static/script/js/bootstrap.min.js"></script>
-        <script>
-            var order = {};
-            order.line_items = {};
-            function edit_item(e) {
-                // parent of parent is the row 
-                var cur_row = e.parentElement.parentElement;
-                // second child contains amount
-                var amount = cur_row.children[1]
-                amount.innerHTML = "<input type='text' value='" + amount.innerHTML + "'>";
-                e.innerHTML = "Done";
-                $(e).attr('onclick', 'edit_done(this);');
-            }
-
-            function edit_done(e) {
-                var cur_item = $(e).attr('data');
-                // parent of parent is the row 
-                var cur_row = e.parentElement.parentElement;
-                // second child contains input box
-                var input_box = cur_row.children[1].children[0];
-                var quantity = parseInt(input_box.value);
-                if (!isNaN(quantity) && quantity >= 0) {
-                    if (quantity == 0) {
-                        delete order.line_items[cur_item];
-                    }
-                    else {
-                        order.line_items[cur_item].quantity = quantity;
-                    }
-                }
-                build_order_table();
-            }
-
-            function add_item(e) {
-                var cur_item = $(e).attr('data');
-                // parent of parent is the row 
-                var cur_row = e.parentElement.parentElement;
-                // first child contains name
-                var name = cur_row.children[0].innerHTML;
-                // second child contains input value
-                var input_box = cur_row.children[1].children[0];
-                var quantity = parseInt(input_box.value);
-                if (!isNaN(quantity) && quantity > 0) {
-                    if ( order.line_items.hasOwnProperty(cur_item) ) {
-                        order.line_items[cur_item].quantity += quantity;
-                    }
-                    else {
-                        order.line_items[cur_item] = {};
-                        order.line_items[cur_item].name = name;
-                        order.line_items[cur_item].quantity = quantity;
-                    }
-                    build_order_table();
-                }
-                input_box.value = "";
-            }
-
-            function build_order_table() {
-                var out = "<table class='table table-condensed'><tr><th>Item</th><th>Amount</th><th></th></tr>";
-                for (id in order.line_items) {
-                    var item = order.line_items[id];
-                    out += "<tr><td>" + item.name + "</td><td>" + item.quantity + "</td><td><button data='" + id + "' onclick='edit_item(this);'>Edit</button></td></tr>";
-                }
-                out += "</table>";
-                $('#pending-order').html(out);
-            }
-            var search_q = new Array();
-            function pop_q() {
-                var query = search_q.shift();
-                if (search_q.length == 0) {
-                    Dajaxice.inventory.search_items( Dajax.process, { query: query } );
-                }
-            }
-            $(function() {
-                $('#item-search').keyup( function() {
-                    search_q.push( $(this).val() );
-                    setTimeout( pop_q, 1000);
-                });
-            });
-        </script>
-
+        <script src="/static/script/js/order.js"></script>
         {% dajaxice_js_import %}
     </head>
     <body>
         <div class="container">
             <div class="row">
-                <div class="span6">
-                    <h1>Add items to order</h1>
-                    <form>
-                        <input id="item-search" class="input-large" type="text" name="query" placeholder="Type to search">
-                    </form>
+                <div class="span5">
+                    <h3>Add items to order</h3>
+                    <input id="item-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
                     <div id="item-results"></div>
                 </div>
-                <div class="span5 offset1">
+                <div class="span6 offset1">
                     <h1>Order</h1>
+                    <table class="table table-condensed">
+                        <tr>
+                            <td>Employee</td>
+                            <td><input id="employee-name" type="text"></td>
+                        </tr>
+                        <tr>
+                            <td>Job</td>
+                            <td><input id="job-name" type="text"></td>
+                        </tr>
+                    </table>
+                    <h3>Items</h3>
                     <div id="pending-order"></div>
+                    <h3>Message</h3>
+                    <div id="message"></div>
+                    <button id="submit-order" class="btn btn-large btn-primary right">Submit Order</button>
                 </div>
             </div>
         </div>
