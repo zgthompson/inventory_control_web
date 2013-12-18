@@ -36,30 +36,18 @@ class Order(models.Model):
         return "Order " + str(self.id)
 
     def save(self, *args, **kwargs):
-        if self.employee and self.job:
+        if  not self.completed and self.employee and self.job:
             self.completed = True
-        else:
-            self.completed = False 
-        models.Model.save(self, *args, **kwargs)
+            for line_item in self.lineitem_set.all():
+                line_item.add_or_update_stockchange()
 
-#    def pending(self):
-#        return not self.employee or not self.job
-
-    def show_employee(self):
         if self.employee:
-            return str(self.employee)
-        elif self.employee_name:
-            return self.employee_name
-        else:
-            return None
+            self.employee_name = self.employee.name
 
-    def show_job(self):
         if self.job:
-            return str(self.job)
-        elif self.job_name:
-            return self.job_name
-        else:
-            return None
+            self.job_name = self.job.name
+
+        models.Model.save(self, *args, **kwargs)
 
 class LineItem(models.Model):
     order = models.ForeignKey(Order)
@@ -68,4 +56,38 @@ class LineItem(models.Model):
 
     def __unicode__(self):
         return str(self.item) + ":" + str(self.quantity)
+
+    def add_or_update_stockchange(self):
+        if self.has_stockchange():
+            self.stockchange.item = self.item
+            self.stockchange.quantity = self.quantity
+            self.stockchange.save()
+        else:
+            StockChange.objects.create(item=self.item, quantity=self.quantity, direction='OUT', line_item=self)
+
+
+    def has_stockchange(self):
+        try:
+            self.stockchange
+            return True
+        except:
+            return False
+
+    def save(self, *args, **kwargs):
+        models.Model.save(self, *args, **kwargs)
+
+        if self.order.completed:
+            self.add_or_update_stockchange()
+
+class StockChange(models.Model):
+    IN_OR_OUT = ( ('IN', 'IN'), ('OUT', 'OUT') )
+
+    item = models.ForeignKey(Item)
+    quantity = models.IntegerField()
+    direction = models.CharField(max_length=3, choices=IN_OR_OUT)
+    date_changed = models.DateTimeField('date changed', auto_now=True, default=None)
+    line_item = models.OneToOneField(LineItem, blank=True, null=True)
+
+    def __unicode__(self):
+        return "Stock Change " + str(self.id)
 

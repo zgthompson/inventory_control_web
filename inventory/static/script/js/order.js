@@ -115,7 +115,7 @@ var orderForm = {
 
     /* This array holds all the search queries made in the last second
      */
-    search_q: new Array(),
+    search_q: { items: []  },
 
     /* This function will remove the oldest query from the search_q array. If
      * that query was the last element of the array, then an AJAX request is
@@ -124,10 +124,10 @@ var orderForm = {
      * done typing their search, so as to not bombard the server on every
      * keydown.
      */
-    pop_q: function() {
-        var query = orderForm.search_q.shift();
-        if (orderForm.search_q.length == 0) {
-            Dajaxice.inventory.search_items( Dajax.process, { query: query } );
+    pop_q: function(type) {
+        var query = orderForm.search_q[type].shift();
+        if (orderForm.search_q[type].length == 0) {
+            eval("Dajaxice.inventory.search_" + type + "( Dajax.process, { query: query } );");
         }
     },
 
@@ -169,8 +169,8 @@ var orderForm = {
      */
     init: function() {
         $('#item-search').keyup( function() {
-            orderForm.search_q.push( $(this).val() );
-            setTimeout( orderForm.pop_q, 1000);
+            orderForm.search_q.items.push( $(this).val() );
+            setTimeout( function() { orderForm.pop_q("items") }, 1000);
         });
         $('#submit-order').click( orderForm.submit_order );
         orderForm.display_items();

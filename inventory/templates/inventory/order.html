@@ -11,12 +11,25 @@
         <script type="text/javascript" src="{{STATIC_URL}}dajax/jquery.dajax.core.js"></script>
         <script src="/static/script/js/bootstrap.min.js"></script>
         <script src="/static/script/js/order.js"></script>
+        {% if request.user.is_active and request.user.is_staff %}
+        <script src="/static/script/js/order-admin.js"></script>
+        {% endif %}
         {% dajaxice_js_import %}
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div class="span5">
+                    {% if request.user.is_active and request.user.is_staff %}
+                    <div id="admin">
+                        <h3>Select employee</h3>
+                        <input id="employee-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
+                        <div id="employee-results"></div>
+                        <h3>Select job</h3>
+                        <input id="job-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
+                        <div id="job-results"></div>
+                    </div>
+                    {% endif %}
                     <h3>Add items to order</h3>
                     <input id="item-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
                     <div id="item-results"></div>
