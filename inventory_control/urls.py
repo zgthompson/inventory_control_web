@@ -11,5 +11,5 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    url(r'^$', include('inventory.urls')),
+    url(r'^inventory/', include('inventory.urls')),
 )

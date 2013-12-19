@@ -16,3 +16,16 @@ html {
 .right {
     float: right;
 }
+
+#datepicker {
+    display: inline-block;
+}
+
+#datepicker .add-on {
+    vertical-align: top;
+    height: 20px;
+}
+
+#generate {
+    vertical-align: top;
+}

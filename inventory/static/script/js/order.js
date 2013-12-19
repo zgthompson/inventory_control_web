@@ -134,7 +134,7 @@ var orderForm = {
     /* Displays the order complete page
      */
     order_complete: function() {
-        $('body').html("<h1>Your order is complete</h1>");
+        $('.row').html("<div class='hero-unit'><h1>Your order is complete</h1></div>");
     },
     /* This function submits the order to the backend and creates a new order
      * in the system

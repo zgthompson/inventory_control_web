@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load dajaxice_templatetags %}
+<html>
+    <head>
+        <link href="/static/style/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/static/style/datepicker.css" rel="stylesheet" media="screen">
+        <link href="/static/style/main.css" rel="stylesheet" media="screen">
+        
+        <title>Reports</title>
+
+        <script src="/static/script/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}dajax/jquery.dajax.core.js"></script>
+        <script src="/static/script/js/bootstrap.min.js"></script>
+        <script src="/static/script/js/bootstrap-datepicker.js"></script>
+        <script src="/static/script/js/jquery.tablesorter.min.js"></script>
+        <script src="/static/script/js/report.js"></script>
+        {% dajaxice_js_import %}
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <h1>Report</h1>
+                <select id="report-type">
+                    <option>Job Cost</option>
+                    <option>Items In</option>
+                    <option>Items Out</option>
+                </select>
+                <div class="input-daterange" id="datepicker">
+                    <input id="start-date" type="text" class="input-small" name="start" />
+                    <span class="add-on">to</span>
+                    <input id="end-date" type="text" class="input-small" name="end" />
+                </div>
+                <button id="generate" class="btn btn-primary">Generate</button>
+            </div>
+            <div class="row">
+                <div id="report-results"></div>
+            </div>
+        </div>
+    </body>
+</html>
