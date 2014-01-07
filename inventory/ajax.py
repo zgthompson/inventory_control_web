@@ -53,6 +53,27 @@ def item_report(request, begin, end, direction):
     return dajax.json()
 
 @dajaxice_register
+def stock(request):
+    dajax = Dajax()
+
+    items = Item.objects.all()
+
+    if items:
+        out = ["<table id='report-table' class='table table-condensed tablesorter'><thead><tr><th>Item name</th><th>Quantity</th></tr></thead><tbody>"]
+        for item in items:
+            out.append("<tr><td>%s</td><td>%s</td></tr>" % ( item.name, item.quantity ) )
+        out.append("</tbody></table>")
+    else:
+        out = ["No items in database"]
+
+    dajax.assign('#report-results', 'innerHTML', ''.join(out))
+
+    if items:
+        dajax.script('report.attach_tablesorter();')
+
+    return dajax.json()
+
+@dajaxice_register
 def job_cost(request, begin, end):
     dajax = Dajax()
 
@@ -140,7 +161,7 @@ def search_items(request, query):
 
     q_list = []
     for word in query.strip().split(" "):
-        q_list.append( Q( name__icontains = word) )
+        q_list.append( Q( name__icontains = word) | Q( search_terms__icontains = word ) )
 
     items = Item.objects.filter( reduce(operator.and_, q_list) )[:10]
 

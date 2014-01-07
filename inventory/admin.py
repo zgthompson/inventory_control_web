@@ -19,12 +19,17 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ['name', 'price', 'quantity']
 
 class OrderAdmin(admin.ModelAdmin):
-    search_fields = ['job__name', 'job__number',  'employee__name']
-    list_filter = ['date_ordered', 'completed']
-    list_display = ['__unicode__', 'job_name', 'employee_name', 'date_ordered', 'completed']
-    fields = [('job', 'job_name'), ('employee', 'employee_name'), 'date_ordered', 'message']
-    raw_id_fields = ['job', 'employee']
-    inlines = [LineItemInline]
+    def delete_orders(self, request, queryset):
+        self.delete_model(request, queryset)
+
+    def delete_model(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+    def get_actions(self, request):
+        actions = super(OrderAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
 
     def get_form(self, request, obj=None, **kwargs):
         self.fields = ['job', 'employee', 'date_ordered', 'message']
@@ -35,6 +40,15 @@ class OrderAdmin(admin.ModelAdmin):
                 self.fields[1] = ('employee', 'employee_name')
         return super(OrderAdmin, self).get_form(request, obj=None, **kwargs)
 
+    search_fields = ['job__name', 'job__number',  'employee__name']
+    list_filter = ['date_ordered', 'completed']
+    list_display = ['__unicode__', 'job_name', 'employee_name', 'date_ordered', 'completed']
+    fields = [('job', 'job_name'), ('employee', 'employee_name'), 'date_ordered', 'message']
+    raw_id_fields = ['job', 'employee']
+    inlines = [LineItemInline]
+    actions = [delete_orders]
+
+"""
 class StockChangeAdmin(admin.ModelAdmin):
     search_fields = ['item__name', 'line_item__order__job_name', 'line_item__order__job__number', 'line_item__order__employee_name']
     list_filter = ['date_changed', 'direction']
@@ -50,10 +64,10 @@ class StockChangeAdmin(admin.ModelAdmin):
         print obj
         print not obj
         return not obj
-
+"""
 
 admin.site.register(Job, JobAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(StockChange, StockChangeAdmin)
+#admin.site.register(StockChange, StockChangeAdmin)
