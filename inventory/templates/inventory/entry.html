@@ -1,0 +1,32 @@
+{% extends "inventory/order.html" %}
+
+{% block title %}New Entry{% endblock %}
+
+{% block admin_js %}
+    <script src="/static/script/js/order-admin.js"></script>
+{% endblock %}
+
+{% block pre-content %}
+    <div id="in-or-out" class="radio">
+        <label class="radio inline">
+            <input type="radio" name="order-type" value="out" checked>
+            Items Out
+        </label>
+        <label class="radio inline">
+            <input type="radio" name="order-type" value="in">
+            Items In
+        </label>
+    </div>
+{% endblock %}
+{% block admin_html %}
+    <div id="admin">
+        <h3>Select employee</h3>
+        <input id="employee-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
+        <div id="employee-results"></div>
+        <h3>Select job</h3>
+        <input id="job-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
+        <div id="job-results"></div>
+    </div>
+{% endblock %}
+
+{% block submit-text %}Submit{% endblock %}

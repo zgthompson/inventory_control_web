@@ -38,6 +38,45 @@ var orderFormAdmin = {
         $('#employee-search').val("");
     },
 
+    /* Displays proper fields based on if the items are going in or out
+     */
+    order_type_display: function() {
+        var in_or_out = $('input[name="order-type"]:checked').val();
+        if (in_or_out == "in") {
+            $('#admin').hide();
+            $('#order-info').hide();
+            $('#message-area').hide();
+        }
+        else {
+            $('#admin').show();
+            $('#order-info').show();
+            $('#message-area').show();
+        }
+    },
+
+    /* Calls proper function based on if order is incoming or outgoing
+     */
+    submit_order: function() {
+        var in_or_out = $('input[name="order-type"]:checked').val();
+
+        if (in_or_out == "in") {
+            var count = 0;
+            for (id in orderForm.order.line_items) count++;
+
+            if (count > 0) {
+                Dajaxice.inventory.add_stock( Dajax.process, { order_json: JSON.stringify(orderForm.order) } );
+                orderForm.order_complete();
+            }
+            else {
+                alert('There are no items to submit');
+            }
+        }
+        // outgoing order
+        else {
+            orderForm.submit_order();
+        }
+    },
+
     /* Set employee name and job name fields to readonly, they will
      * automatically be set by the employee/job search and attach
      * keyup listeners to the job and employee search fields
@@ -49,6 +88,9 @@ var orderFormAdmin = {
         orderForm.search_q.jobs = [];
         orderForm.search_q.employees = [];
 
+        $('#in-or-out').change( orderFormAdmin.order_type_display );
+        orderFormAdmin.order_type_display();
+
         $('#job-search').keyup( function() {
             orderForm.search_q.jobs.push( $(this).val() );
             setTimeout( function() { orderForm.pop_q("jobs") }, 1000);
@@ -58,9 +100,13 @@ var orderFormAdmin = {
             setTimeout( function() { orderForm.pop_q("employees") }, 1000);
         });
 
+        $('#submit-order').unbind();
+        $('#submit-order').click( orderFormAdmin.submit_order );
 
-
-
+        // override orderForm.order_complete in order to expediate multiple orders
+        orderForm.order_complete = function() {
+            $('.row').html("<div class='hero-unit'><h1>Entry complete</h1><h3>Click <a href='/entry'>here</a> to make another entry</h3></div>");
+        };
     }
 };
 

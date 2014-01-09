@@ -151,10 +151,6 @@ def search_employees(request, query):
 
     return dajax.json()
 
-
-
-
-
 @dajaxice_register
 def search_items(request, query):
     dajax = Dajax()
@@ -175,6 +171,13 @@ def search_items(request, query):
     dajax.assign('#item-results', 'innerHTML', ''.join(out))
 
     return dajax.json()
+
+@dajaxice_register
+def add_stock(request, order_json):
+    order_data = json.loads(order_json)
+
+    for key, value in order_data['line_items'].items():
+        StockChange.objects.create(item_id=key, quantity=value['quantity'], direction='IN')
 
 @dajaxice_register
 def add_order(request, order_json):
