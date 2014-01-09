@@ -11,13 +11,15 @@
     <div class="container">
         <div class="row">
             {% block pre-content %}{% endblock %}
-            <div class="span5">
+            <div id="left-side" class="span5">
                 {% block admin_html %}{% endblock %}
                 <h3>Add items to order</h3>
                 <input id="item-search" autocomplete="off" class="input-large" type="text" name="query" placeholder="Type to search">
                 <div id="item-results"></div>
+                <p id="add-text" class="text-success"></p>
+                <div id="go-right"><button class="btn">View order</button></div>
             </div>
-            <div class="span6 offset1">
+            <div id="right-side" class="span6 offset1">
                 <div id="order-info">
                     <h1>Order</h1>
                     <table class="table table-condensed">
@@ -33,6 +35,9 @@
                 </div>
                 <h3>Items</h3>
                 <div id="pending-order"></div>
+                <div id="go-left">
+                    <button class="btn">Add more items</button>
+                </div>
                 <div id="message-area">
                     <h3>Message</h3>
                     <div id="message"></div>

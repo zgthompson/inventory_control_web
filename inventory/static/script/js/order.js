@@ -65,6 +65,7 @@ var orderForm = {
                 orderForm.order.line_items[cur_item].units = units;
             }
             orderForm.display_items();
+            $('#add-text').html("Added " + quantity + " " + units + " of " + name + " to order.")
         }
         input_box.value = "";
     },
@@ -173,6 +174,26 @@ var orderForm = {
             setTimeout( function() { orderForm.pop_q("items") }, 1000);
         });
         $('#submit-order').click( orderForm.submit_order );
+
+        //hide right side and show left
+        $('#go-left').click( function() {
+            $('#right-side').hide();
+            $('#left-side').show();
+        });
+
+        //hide left side and show right
+        $('#go-right').click( function() {
+            $('#left-side').hide();
+            $('#right-side').show();
+        });
+
+        //show left and right if resized to fit them
+        $(window).resize( function() {
+            if ( $(this).width() > 640 ) {
+                $('#left-side, #right-side').show();
+            }
+        });
+
         orderForm.display_items();
         orderForm.display_message();
         Dajaxice.inventory.search_items( Dajax.process, { query: "" } );
