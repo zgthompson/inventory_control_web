@@ -35,41 +35,29 @@ html {
 }
 
 /* #### Mobile Phones Portrait or Landscape #### */
-@media screen and (max-device-width: 640px), only screen and (max-width: 640px) {
+@media screen and (max-device-width: 640px) {
     #go-left, #go-right, #add-text {
         display: block;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .row {
+        margin-left: 0px;
     }
 
     #message textarea {
         width: 95%;
     }
+
     #left-side, #right-side {
-        margin: 0 40px 20px 60px;
+        margin: 0 2% 2% 2%;
+        width: 96%
     }
 
     #right-side {
         display: none;
-    }
-}
-
-/* ### Mobile Phones Landscape ### */
-@media screen and (max-width: 640px), screen and (max-device-width: 640px) {
-    .container {
-        width: 640px;
-    }
-
-    #left-side, #right-side {
-        width: 560px;
-    }
-}
-
-/* #### Mobile Phones Portrait #### */
-@media screen and (max-width: 480px), screen and (max-device-width: 480px) {
-    .container {
-        width: 480px;
-    }
-
-    #left-side, #right-side {
-        width: 400px;
     }
 }
