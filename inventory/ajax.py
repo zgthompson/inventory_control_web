@@ -7,7 +7,7 @@ import json
 from datetime import date
 from datetime import time
 from inventory.models import *
-import inventory_control.config
+from inventory_control import config
 
 @dajaxice_register
 def items_out(request, begin, end):
