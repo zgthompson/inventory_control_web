@@ -228,7 +228,7 @@ def order_to_html(order):
     if order.message:
         out += "<p>" + order.message + "</p>"
 
-    out += "<p>Click <a href='http://localhost:8000/admin/inventory/order/" + str(order.id) + "'>here</a> to view order.</p>"
+    out += "<p>Click <a href='" + config.ROOT_URL + "admin/inventory/order/" + str(order.id) + "'>here</a> to view order.</p>"
     out += "</body>"
     return out
 
