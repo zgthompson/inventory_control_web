@@ -148,6 +148,11 @@ LOGGING = {
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ["GM_LOGIN"]
-EMAIL_HOST_PASSWORD = os.environ["GM_PASS"]
+EMAIL_HOST_USER = ORDER_EMAILER
+EMAIL_HOST_PASSWORD = ORDER_EMAILER_PASS
 EMAIL_PORT = 587
+
+try:
+    from settings_production import *
+except ImportError, e:
+    pass

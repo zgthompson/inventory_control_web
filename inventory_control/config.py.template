@@ -1,4 +1,10 @@
 SITE_NAME = 'My Site'
+
+INVENTORY_ADMIN = 'theadmin@gmail.com'
+
 DB_NAME = 'dbname'
 DB_USER = 'dbuser'
 DB_PASS = 'dbpass'
+
+ORDER_EMAILER = 'anything@gmail.com'
+ORDER_EMAILER_PASS = 'password'

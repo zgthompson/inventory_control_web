@@ -1,5 +1,6 @@
 # local settings
 inventory_control/config.py
+inventory_control/settings_production.py
 
 *.py[cod]
 

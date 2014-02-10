@@ -7,6 +7,7 @@ import json
 from datetime import date
 from datetime import time
 from inventory.models import *
+import inventory_control.config
 
 @dajaxice_register
 def items_out(request, begin, end):
@@ -204,7 +205,7 @@ def add_order(request, order_json):
     order.save()
 
     if not order.completed:
-        email = EmailMultiAlternatives('New order', order_to_plaintext(order), to=['zgthompson@gmail.com'])
+        email = EmailMultiAlternatives('New order', order_to_plaintext(order), to=[config.INVENTORY_ADMIN])
         email.attach_alternative(order_to_html(order), "text/html")
         email.send()
 
