@@ -160,16 +160,19 @@ def search_items(request, query):
     for word in query.strip().split(" "):
         q_list.append( Q( name__icontains = word) | Q( search_terms__icontains = word ) )
 
-    items = Item.objects.filter( reduce(operator.and_, q_list) )[:10]
+    items = Item.objects.filter( reduce(operator.and_, q_list) )
 
     if items:
-        out = ["<table class='table table-striped table-bordered table-hover'><tr><th>Item</th><th>Amount</th><th>Units</th><th></th></tr>"]
+        out = ["<table id='item-table' class='table table-striped table-bordered table-hover tablesorter'><tr><th>Item</th><th>Amount</th><th>Units</th><th></th></tr>"]
         for item in items:
             out.append("<tr><td>%s</td><td><input type='text' name='quantity' autocomplete='off' placeholder='0'></td><td>%s</td><td><button class='btn' data='%s' onclick='orderForm.add_item(this);'>Add</button></td></tr>" % (item.name, item.units, item.id) )
         out.append("</table>")
     else:
         out = ["No items found"]
     dajax.assign('#item-results', 'innerHTML', ''.join(out))
+
+    if items:
+        dajax.script('orderForm.attach_tablepager();')
 
     return dajax.json()
 

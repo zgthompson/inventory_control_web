@@ -109,7 +109,11 @@ class StockChange(models.Model):
         print "stockchange delete"
         item = Item.objects.get(id=self.item.id)
         if self.direction is 'IN':
-            item.quantity -= self.quantity
+            val = item.quantity - self.quantity
+            if val > 0:
+                item.quantity = val
+            else:
+                item.quantity = 0
         else:
             item.quantity += self.quantity
 
@@ -122,7 +126,11 @@ class StockChange(models.Model):
         if self.direction is 'IN':
             self.item.quantity += self.quantity
         else:
-            self.item.quantity -= self.quantity
+            val = self.item.quantity - self.quantity
+            if val > 0:
+                self.item.quantity = val
+            else:
+                self.item.quantity = 0
 
         self.item.save()
 

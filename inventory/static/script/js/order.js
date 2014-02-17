@@ -1,5 +1,12 @@
 var orderForm = {
 
+    /* attach tablepager functionality to report table
+     */
+    attach_tablepager: function() {
+        $('#item-table')
+        .oneSimpleTablePagination({rowsPerPage:5});
+    },
+
     /* This is the internal representation of the order.
      */
     order: { line_items: {} },
@@ -75,6 +82,7 @@ var orderForm = {
     add_message: function(e) {
         var out = "<textarea rows='10'></textarea><div><button class='btn' onclick='orderForm.display_message(this);'>Remove message</button>"
         $('#message').html(out);
+        $('#message textarea').focus();
     },
 
     /* This function generates the HTML markup for the pending order items
