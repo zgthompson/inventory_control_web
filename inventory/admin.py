@@ -23,8 +23,12 @@ class OrderAdmin(admin.ModelAdmin):
         self.delete_model(request, queryset)
 
     def delete_model(self, request, queryset):
-        for obj in queryset:
-            obj.delete()
+        try:
+            query_iter = iter(queryset)
+            for obj in query_iter:
+                obj.delete()
+        except TypeError:
+            queryset.delete()
 
     def get_actions(self, request):
         actions = super(OrderAdmin, self).get_actions(request)
