@@ -85,11 +85,15 @@ def job_cost(request, begin, end):
     orders = Order.objects.filter( date_ordered__range=(start_date, end_date), completed=True )
 
     totals = {}
+    grand_total = 0
 
     for order in orders:
         cur_total = 0
         for line_item in order.lineitem_set.all():
             cur_total += line_item.item.price * line_item.quantity
+
+        grand_total += cur_total
+
         if order.job.id in totals:
             totals[order.job.id]['total'] += cur_total
         else:
@@ -102,6 +106,7 @@ def job_cost(request, begin, end):
         out = ["<table id='report-table' class='table table-condensed tablesorter'><thead><tr><th>Job number</th><th>Job name</th><th>Total</th></tr></thead><tbody>"]
         for job in totals.itervalues():
             out.append("<tr><td>%s</td><td>%s</td><td>$%s</td></tr>" % ( job['number'], job['name'], job['total'] ) )
+        out.append("<tr><td><b>Grand Total</b></td><td></td><td><b>$%s</b></td></tr>" % grand_total)
         out.append("</tbody></table>")
     else:
         out = ["No results for this date range"]
